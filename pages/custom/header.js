@@ -18,6 +18,9 @@ const Header = ({ cartItems, updateCartItem, updateCartState }) => {
     };
   }, []);
 
+  // Check if cartItems is defined before accessing its properties
+  const cartItemCount = cartItems ? cartItems.length : 0;
+
   const updatedPrice = (item) => {
     return item.units * item.price;
   };
@@ -34,15 +37,19 @@ const Header = ({ cartItems, updateCartItem, updateCartState }) => {
   const calculateTotalPrice = () => {
     return cartItems.reduce((total, item) => total + updatedPrice(item), 0);
   };
+
   const checking = () => {
     // Iterate over each item in cartItems
     cartItems.forEach(item => {
       // Construct the message with item details separated by new lines
       const message = `ID: ${item.id}\nProduct name: ${item.name}\nOriginal Price: ${item.price}\nUnits: ${item.units}\nNet Total: ${updatedPrice(item)}`;
       // Display the message in an alert
-      alert(message);
+      alert(
+        'Successfully Added'+
+        message);
     });
   };
+
   return (
     <header
       data-theme="nord"
@@ -51,19 +58,19 @@ const Header = ({ cartItems, updateCartItem, updateCartState }) => {
       <div className="flex items-center">
         <img src="logo.png" alt="Company Logo" className="w-10 h-8 mr-2 bg-sky-400" />
         <a href='/'> 
-  <span className="text-xl font-bold">E-Commerce Project <span className="text-red-500">.</span></span>
-</a>
+          <span className="text-xl font-bold">E-Commerce Project <span className="text-red-500">.</span></span>
+        </a>
       </div>
 
       <div className="flex items-center relative">
         <button className="mr-4 bg-white border border-gray-800 rounded-xl px-2 py-0.5" onClick={() => setShowCart(!showCart)}>
           <img src="/cart.svg" alt="Cart" className="w-12 h-10" />
-          {cartItems.length > 0 && (
-            <label className='font-bold'>Cart:(<span className="ml-1 font-bold border border-gray-200 rounded font-sans bg-transparent text-red-500">{cartItems.length}</span>)</label>
+          {cartItemCount > 0 && (
+            <label className='font-bold'>Cart:(<span className="ml-1 font-bold border border-gray-200 rounded font-sans bg-transparent text-red-500">{cartItemCount}</span>)</label>
           )}
         </button>
         {/* Show cart items */}
-        {cartItems.length === 0? <>  {showCart && (<span className="ml-1 font-bold border border-gray-200 rounded  bg-white h-8  text-red-600">No items were added to the cart.</span>)}
+        {cartItemCount === 0? <>  {showCart && (<span className="ml-1 font-bold border border-gray-200 rounded  bg-white h-8  text-red-600">No items were added to the cart.</span>)}
             </> :  <>{showCart && (
           
           <div ref={cartRef} className=" absolute bg-white rounded-lg shadow-md p-0 right-4 top-full mt-1 max-w-xl overflow-hidden">
@@ -105,7 +112,7 @@ const Header = ({ cartItems, updateCartItem, updateCartState }) => {
               </tbody>
             </table>
             {/* Total Price */}
-            {cartItems.length > 0 && (
+            {cartItemCount > 0 && (
             <div className="font-serif font-semibold text-lg text-gray-800 mb-2 mt-8 ml-2">
               Net Total: 
               <span className='bg-slate-800 font-sans font-bold text-green-400'>
